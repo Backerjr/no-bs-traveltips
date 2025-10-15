@@ -1,5 +1,8 @@
 import random
 
+WHATSAPP_NUMBER = "+971506313291" # Formatted for URL link
+WHATSAPP_URL = f"https://wa.me/{WHATSAPP_NUMBER}"
+
 # A multilingual knowledge base for Dubai tours and experiences.
 KNOWLEDGE_BASE = {
     "burj khalifa": {
@@ -41,36 +44,26 @@ KNOWLEDGE_BASE = {
             "response": "أهلاً بك في خدمة 'أحمد - مساعدك الذكي'™. أنا هنا لمساعدتك على اكتشاف روح دبي الأصيلة. عن أي مغامرة تحلم اليوم؟",
             "tip": "لالتقاط أروع الصور، فإن 'الساعة الذهبية' قبيل غروب الشمس تغمر المدينة بضوء ساحر. إنها لحظة يحلم بها كل مصور."
         }
+    },
+    "booking_prompt": {
+        "en": f"Ready to make this a reality? To arrange your private tour, please contact me directly on WhatsApp: <a href='{WHATSAPP_URL}' target='_blank'>+971 50 631 3291</a>",
+        "ar": f"هل أنت مستعد لتحويل هذا الحلم إلى حقيقة؟ لترتيب جولتك الخاصة، يرجى التواصل معي مباشرة عبر الواتساب: <a href='{WHATSAPP_URL}' target='_blank'>+971 50 631 3291</a>"
     }
 }
 
-def get_concierge_response(user_query: str, language: str = "en") -> tuple[str, str, str]:
+def get_concierge_response(user_query: str, language: str = "en") -> tuple[str, str, str, str | None]:
     """
-    Analyzes a user's query and returns a story-driven response and an "Ahmed's Tip™"
-    in the specified language.
-
-    Args:
-        user_query: The question from the user.
-        language: The selected language ('en' or 'ar').
-
-    Returns:
-        A tuple containing the main response, the tip, and the translated "Ahmed's Tip" title.
+    Analyzes a user's query and returns a response, tip, tip title, and optional booking prompt.
     """
     tip_title = "Ahmed's Tip™" if language == "en" else "نصيحة أحمد™"
+    booking_info = None
 
     if not user_query:
-        # Initial greeting if the query is empty
         data = KNOWLEDGE_BASE["greeting"][language]
-        return data["response"], data["tip"], tip_title
+        return data["response"], data["tip"], tip_title, booking_info
 
     query = user_query.lower()
-
-    # Simple keyword matching for English queries
-    keyword_map = {
-        "burj khalifa": "burj khalifa",
-        "safari": "desert safari"
-    }
-
+    keyword_map = {"burj khalifa": "burj khalifa", "safari": "desert safari"}
     matched_key = "default"
     for keyword, key in keyword_map.items():
         if keyword in query:
@@ -78,4 +71,9 @@ def get_concierge_response(user_query: str, language: str = "en") -> tuple[str, 
             break
 
     data = KNOWLEDGE_BASE[matched_key][language]
-    return data["response"], data["tip"], tip_title
+
+    # Only show the booking prompt if a specific experience was matched
+    if matched_key != "default":
+        booking_info = KNOWLEDGE_BASE["booking_prompt"][language]
+
+    return data["response"], data["tip"], tip_title, booking_info
