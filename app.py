@@ -19,11 +19,11 @@ UI_TEXT = {
 
 def chat_response(message, history, language):
     """
-    Handles the chat interaction, gets the response and tip in the correct language,
+    Handles the chat interaction, gets all response elements in the correct language,
     and formats them for the UI.
     """
     history.append({"role": "user", "content": message})
-    response, tip, tip_title = get_concierge_response(message, language)
+    response, tip, tip_title, booking_info = get_concierge_response(message, language)
     history.append({"role": "assistant", "content": response})
 
     tip_card_html = f"""
@@ -32,7 +32,16 @@ def chat_response(message, history, language):
         <p style="margin-top: 8px; color: #2C3E50;">{tip}</p>
     </div>
     """
-    return "", history, tip_card_html
+
+    booking_card_html = ""
+    if booking_info:
+        booking_card_html = f"""
+        <div style="background-color: #1A237E; color: white; padding: 20px; margin-top: 20px; border-radius: 8px; text-align: center;">
+            <p style="font-size: 1.1rem; margin: 0;">{booking_info}</p>
+        </div>
+        """
+
+    return "", history, tip_card_html, booking_card_html
 
 def update_ui_language(language):
     """
@@ -46,7 +55,6 @@ def update_ui_language(language):
 
 # --- Gradio Interface Definition ---
 with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
-    # State to hold the current language
     language_state = gr.State("en")
 
     gr.Markdown(f"""
@@ -55,42 +63,26 @@ with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
     </div>
     """)
 
-    lang_selector = gr.Radio(
-        ["English", "العربية"],
-        value="English",
-        label="Language / اللغة",
-        info="Select your preferred language."
-    )
+    lang_selector = gr.Radio(["English", "العربية"], value="English", label="Language / اللغة")
 
-    chatbot = gr.Chatbot(
-        label=UI_TEXT["en"]["chatbot_label"],
-        height=400,
-        bubble_styling={"template": "soft"}
-    )
-    msg_input = gr.Textbox(
-        label=UI_TEXT["en"]["input_label"],
-        placeholder=UI_TEXT["en"]["input_placeholder"],
-        scale=3
-    )
-    tip_output = gr.Markdown()
+    with gr.Row():
+        with gr.Column(scale=2):
+            chatbot = gr.Chatbot(label=UI_TEXT["en"]["chatbot_label"], height=450, bubble_styling={"template": "soft"})
+            msg_input = gr.Textbox(label=UI_TEXT["en"]["input_label"], placeholder=UI_TEXT["en"]["input_placeholder"])
+        with gr.Column(scale=1):
+            tip_output = gr.Markdown()
+            booking_output = gr.Markdown() # New component for the booking prompt
 
-    # Link the language selector to the UI update function
-    lang_selector.change(
-        fn=update_ui_language,
-        inputs=lang_selector,
-        outputs=[chatbot, msg_input]
-    )
+    lang_selector.change(fn=update_ui_language, inputs=lang_selector, outputs=[chatbot, msg_input])
 
-    # Link the language selector to the language state
     @lang_selector.change(inputs=lang_selector)
     def update_lang_state(language):
         return "en" if language == "English" else "ar"
 
-    # Link the chat submission to the response function
     msg_input.submit(
         fn=chat_response,
         inputs=[msg_input, chatbot, language_state],
-        outputs=[msg_input, chatbot, tip_output]
+        outputs=[msg_input, chatbot, tip_output, booking_output]
     )
 
 if __name__ == "__main__":
