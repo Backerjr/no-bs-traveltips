@@ -1,5 +1,6 @@
 import gradio as gr
 from src.concierge_logic import get_concierge_response
+from src.language_utils import normalize_language_selection
 
 # --- UI Text Translations ---
 UI_TEXT = {
@@ -22,8 +23,9 @@ def chat_response(message, history, language):
     Handles the chat interaction, gets all response elements in the correct language,
     and formats them for the UI.
     """
+    language_code = normalize_language_selection(language)
     history.append({"role": "user", "content": message})
-    response, tip, tip_title, booking_info = get_concierge_response(message, language)
+    response, tip, tip_title, booking_info = get_concierge_response(message, language_code)
     history.append({"role": "assistant", "content": response})
 
     tip_card_html = f"""
@@ -47,10 +49,11 @@ def update_ui_language(language):
     """
     Updates all UI text components based on the selected language.
     """
-    lang_code = "en" if language == "English" else "ar"
+    lang_code = normalize_language_selection(language)
     return (
         gr.update(label=UI_TEXT[lang_code]["chatbot_label"]),
         gr.update(label=UI_TEXT[lang_code]["input_label"], placeholder=UI_TEXT[lang_code]["input_placeholder"]),
+        lang_code,
     )
 
 # --- Gradio Interface Definition ---
@@ -73,11 +76,11 @@ with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
             tip_output = gr.Markdown()
             booking_output = gr.Markdown() # New component for the booking prompt
 
-    lang_selector.change(fn=update_ui_language, inputs=lang_selector, outputs=[chatbot, msg_input])
-
-    @lang_selector.change(inputs=lang_selector)
-    def update_lang_state(language):
-        return "en" if language == "English" else "ar"
+    lang_selector.change(
+        fn=update_ui_language,
+        inputs=lang_selector,
+        outputs=[chatbot, msg_input, language_state],
+    )
 
     msg_input.submit(
         fn=chat_response,
