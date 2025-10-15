@@ -1,0 +1,68 @@
+/* Import elegant fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap');
+
+/* --- Ahmed's AI Concierge™ Style Guide --- */
+
+/* :root {
+    --font-family-headings: 'Playfair Display', serif;
+    --font-family-body: 'Lato', sans-serif;
+    --color-gold-accent: #D4AF37;
+    --color-deep-navy: #1A237E;
+    --color-charcoal-text: #2C3E50;
+    --color-background: #FDFEFE;
+    --color-light-gray: #f0f0f0;
+} */
+
+/* General Body Styling */
+body {
+    background-color: var(--color-background);
+    font-family: var(--font-family-body);
+    color: var(--color-charcoal-text);
+}
+
+/* Gradio App Container */
+gradio-app {
+    background-color: var(--color-background) !important;
+}
+
+/* Main Heading - "Ahmed’s AI Concierge™" */
+h1 {
+    font-family: var(--font-family-headings) !important;
+    color: var(--color-deep-navy) !important;
+    text-align: center;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    font-size: 2.5rem !important;
+}
+
+/* Component Labels (e.g., "What is your name?") */
+.gr-label {
+    font-family: var(--font-family-body) !important;
+    font-weight: 700 !important;
+    color: var(--color-deep-navy) !important;
+    font-size: 1rem !important;
+}
+
+/* Input/Output Textboxes */
+.gr-textbox {
+    border-radius: 8px !important;
+    border: 1px solid var(--color-light-gray) !important;
+    box-shadow: none !important;
+    background-color: #ffffff !important;
+}
+
+/* Button Styling */
+.gr-button {
+    background-color: var(--color-gold-accent) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    font-family: var(--font-family-body) !important;
+    font-weight: 700 !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    transition: background-color 0.3s ease;
+}
+
+.gr-button:hover {
+    background-color: #c8a02a !important; /* Slightly darker gold on hover */
+}
