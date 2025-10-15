@@ -2,39 +2,54 @@ import sys
 from pathlib import Path
 import pytest
 
-# Add the project root to the Python path to allow for module imports
+# Add the project root to the Python path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.concierge_logic import get_concierge_response, KNOWLEDGE_BASE
 
-def test_initial_greeting_response():
-    """
-    Tests that an empty query returns the initial welcome message and tip.
-    """
-    response, tip = get_concierge_response("")
-    assert "Welcome to Ahmed’s AI Concierge™" in response
-    assert isinstance(tip, str) and len(tip) > 0
+# --- English Tests ---
 
-def test_burj_khalifa_query():
-    """
-    Tests the response for a query about the Burj Khalifa.
-    """
-    response, tip = get_concierge_response("tell me about burj khalifa")
-    assert response == KNOWLEDGE_BASE["burj khalifa"]["response"]
-    assert tip == KNOWLEDGE_BASE["burj khalifa"]["tip"]
+def test_initial_greeting_en():
+    response, tip, tip_title = get_concierge_response("", language="en")
+    assert response == KNOWLEDGE_BASE["greeting"]["en"]["response"]
+    assert tip == KNOWLEDGE_BASE["greeting"]["en"]["tip"]
+    assert tip_title == "Ahmed's Tip™"
 
-def test_desert_safari_query():
-    """
-    Tests the response for a query about the desert safari.
-    """
-    response, tip = get_concierge_response("what is a desert safari like?")
-    assert response == KNOWLEDGE_BASE["desert safari"]["response"]
-    assert tip == KNOWLEDGE_BASE["desert safari"]["tip"]
+def test_burj_khalifa_query_en():
+    response, tip, tip_title = get_concierge_response("tell me about burj khalifa", language="en")
+    assert response == KNOWLEDGE_BASE["burj khalifa"]["en"]["response"]
+    assert tip == KNOWLEDGE_BASE["burj khalifa"]["en"]["tip"]
 
-def test_default_response_for_unknown_query():
-    """
-    Tests that an unknown query returns the default response and tip.
-    """
-    response, tip = get_concierge_response("tell me about the food")
-    assert response == KNOWLEDGE_BASE["default"]["response"]
-    assert tip == KNOWLEDGE_BASE["default"]["tip"]
+def test_desert_safari_query_en():
+    response, tip, tip_title = get_concierge_response("what is a desert safari like?", language="en")
+    assert response == KNOWLEDGE_BASE["desert safari"]["en"]["response"]
+    assert tip == KNOWLEDGE_BASE["desert safari"]["en"]["tip"]
+
+def test_default_response_en():
+    response, tip, tip_title = get_concierge_response("tell me about the food", language="en")
+    assert response == KNOWLEDGE_BASE["default"]["en"]["response"]
+    assert tip == KNOWLEDGE_BASE["default"]["en"]["tip"]
+
+# --- Arabic Tests ---
+
+def test_initial_greeting_ar():
+    response, tip, tip_title = get_concierge_response("", language="ar")
+    assert response == KNOWLEDGE_BASE["greeting"]["ar"]["response"]
+    assert tip == KNOWLEDGE_BASE["greeting"]["ar"]["tip"]
+    assert tip_title == "نصيحة أحمد™"
+
+def test_burj_khalifa_query_ar_from_en_keyword():
+    """ Still using English keywords for now, but testing for Arabic output """
+    response, tip, tip_title = get_concierge_response("tell me about burj khalifa", language="ar")
+    assert response == KNOWLEDGE_BASE["burj khalifa"]["ar"]["response"]
+    assert tip == KNOWLEDGE_BASE["burj khalifa"]["ar"]["tip"]
+
+def test_desert_safari_query_ar_from_en_keyword():
+    response, tip, tip_title = get_concierge_response("what is a desert safari like?", language="ar")
+    assert response == KNOWLEDGE_BASE["desert safari"]["ar"]["response"]
+    assert tip == KNOWLEDGE_BASE["desert safari"]["ar"]["tip"]
+
+def test_default_response_ar():
+    response, tip, tip_title = get_concierge_response("tell me about the food", language="ar")
+    assert response == KNOWLEDGE_BASE["default"]["ar"]["response"]
+    assert tip == KNOWLEDGE_BASE["default"]["ar"]["tip"]
