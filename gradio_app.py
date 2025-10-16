@@ -100,8 +100,8 @@ if __name__ == "__main__":
 demo = gr.Blocks(css="assets/style.css", theme=gr.themes.Soft())
 
 with demo:
-    # your interface definition (already written)
+    pass  # or put your logic here
 
 if __name__ == "__main__":
-    import sys
-    demo.launch(share="--share" in sys.argv)
+    demo.launch()
+
