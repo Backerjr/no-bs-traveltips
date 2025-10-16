@@ -1,11 +1,6 @@
-from flask import Flask
-import gradio as gr
-from src.concierge_logic import get_concierge_response
-from src.language_utils import normalize_language_selection
+from gradio_app import demo  # this is your full Gradio interface
+app = demo.app               # expose it for gunicorn to serve
 
-
-# --- Flask backend (optional API health endpoint) ---
-app = Flask(__name__)
 
 @app.route("/")
 def home():
