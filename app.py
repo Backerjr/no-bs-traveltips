@@ -78,7 +78,12 @@ with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
 
     with gr.Row():
         with gr.Column(scale=2):
-            chatbot = gr.Chatbot(label=UI_TEXT["en"]["chatbot_label"], height=450, bubble_styling={"template": "soft"})
+            chatbot = gr.Chatbot(
+    label=UI_TEXT["en"]["chatbot_label"],
+    height=450,
+    bubble_styling={"template": "soft"}
+)
+
             msg_input = gr.Textbox(label=UI_TEXT["en"]["input_label"], placeholder=UI_TEXT["en"]["input_placeholder"])
         with gr.Column(scale=1):
             tip_output = gr.Markdown()
