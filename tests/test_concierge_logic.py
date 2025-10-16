@@ -68,3 +68,8 @@ def test_whitespace_query_en():
     assert tip == KNOWLEDGE_BASE["greeting"]["en"]["tip"]
     assert tip_title == "Ahmed's Tip™"
     assert booking_info is None
+
+def test_negative_query_en():
+    """Test that a negative query does not trigger a keyword."""
+    response, _, _, _ = get_concierge_response("I don't want to go to the desert safari", language="en")
+    assert response == KNOWLEDGE_BASE["default"]["en"]["response"], "Negative query should return default response"
