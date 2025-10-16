@@ -1,6 +1,0 @@
-gradio==4.29.0
-pytest>=7.4
-flask
-gunicorn
-audioop-lts; python_version >= "3.13"
-Flask
