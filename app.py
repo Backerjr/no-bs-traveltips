@@ -1,6 +1,13 @@
-import gradio as gr
+from flask import Flask
 from src.concierge_logic import get_concierge_response
 from src.language_utils import normalize_language_selection
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello from Concierge!"
+
 
 # --- UI Text Translations ---
 UI_TEXT = {
