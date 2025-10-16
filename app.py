@@ -1,5 +1,7 @@
-from gradio_app import demo  # this is your full Gradio interface
-app = demo.app               # expose it for gunicorn to serve
+from gradio_app import demo
+
+app = demo.app
+
 
 
 @app.route("/")
