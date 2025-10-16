@@ -1,13 +1,13 @@
 from flask import Flask
 from src.concierge_logic import get_concierge_response
 from src.language_utils import normalize_language_selection
-import gradio as gr
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Hello from Concierge!"
+    return "Hello from Concierge - Flask backend is live!"
+
 
 
 # --- UI Text Translations ---
