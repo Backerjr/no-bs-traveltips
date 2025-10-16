@@ -96,3 +96,12 @@ if __name__ == "__main__":
     import sys
     share = '--share' in sys.argv
     demo.launch(share=share)
+# 👇 Add this at the end of gradio_app.py
+demo = gr.Blocks(css="assets/style.css", theme=gr.themes.Soft())
+
+with demo:
+    # your interface definition (already written)
+
+if __name__ == "__main__":
+    import sys
+    demo.launch(share="--share" in sys.argv)
