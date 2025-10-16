@@ -50,8 +50,7 @@ def update_ui_language(language):
         lang_code,
     )
 
-
-# ✅ FINAL Gradio 4.29-compatible layout
+# --- Gradio Interface ---
 with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
     language_state = gr.State("en")
 
