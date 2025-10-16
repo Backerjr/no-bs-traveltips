@@ -64,22 +64,10 @@ def get_concierge_response(user_query: str, language: str = "en") -> tuple[str, 
         return data["response"], data["tip"], tip_title, booking_info
 
     query = user_query.lower()
-
-    # Define keywords and negative words
     keyword_map = {"burj khalifa": "burj khalifa", "safari": "desert safari"}
-    negative_words = {"not", "don't", "dont", "without", "no"}
-
     matched_key = "default"
-
-    # More sophisticated keyword matching
     for keyword, key in keyword_map.items():
-        keyword_pos = query.find(keyword)
-        if keyword_pos != -1:
-            # Check for negative words in the text preceding the keyword
-            pre_context = query[:keyword_pos]
-            if any(neg_word in pre_context.split() for neg_word in negative_words):
-                continue  # Negative context found, skip this keyword.
-
+        if keyword in query:
             matched_key = key
             break
 
