@@ -51,49 +51,23 @@ def update_ui_language(language):
         lang_code,
     )
 
-
-# --- Gradio Interface Definition ---
+# --- Gradio Interface ---
 with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
     language_state = gr.State("en")
 
     gr.Markdown(f"""
     <div style="text-align: center; padding-bottom: 10px;">
-        <h1 style="font-family: 'Playfair Display', serif; color: #1A237E;">{UI_TEXT['en']['title']} / {UI_TEXT['ar']['title']}</h1>
+        <h1 style="font-family: 'Playfair Display', serif; color: #1A237E;">
+            {UI_TEXT['en']['title']} / {UI_TEXT['ar']['title']}
+        </h1>
     </div>
     """)
 
     lang_selector = gr.Radio(["English", "العربية"], value="English", label="Language / اللغة")
+    chatbot = gr.Chatbot(label=UI_TEXT["en"]["chatbot_label"], height=450, type="messages")
+    msg_input = gr.Textbox(label=UI_TEXT["en"]["input_label"], placeholder=UI_TEXT["en"]["input_placeholder"])
+    tip_output = gr.Markdown()
+    booking_output = gr.Markdown()
 
     with gr.Row():
         with gr.Column(scale=2):
-            chatbot = gr.Chatbot(
-                label=UI_TEXT["en"]["chatbot_label"],
-                height=450,
-                bubble_styling={"template": "soft"}
-            )
-            msg_input = gr.Textbox(
-                label=UI_TEXT["en"]["input_label"],
-                placeholder=UI_TEXT["en"]["input_placeholder"]
-            )
-
-        with gr.Column(scale=1):
-            tip_output = gr.Markdown()
-            booking_output = gr.Markdown()
-
-    lang_selector.change(
-        fn=update_ui_language,
-        inputs=lang_selector,
-        outputs=[chatbot, msg_input, language_state],
-    )
-
-    msg_input.submit(
-        fn=chat_response,
-        inputs=[msg_input, chatbot, language_state],
-        outputs=[msg_input, chatbot, tip_output, booking_output]
-    )
-
-
-if __name__ == "__main__":
-    import sys
-    share = '--share' in sys.argv
-    demo.launch(share=share)
