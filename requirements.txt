@@ -1,0 +1,6 @@
+# Minimal dependencies for a Flask app served by Gunicorn on Render
+flask
+gunicorn
+
+# Optional (uncomment if you use env files locally)
+# python-dotenv
