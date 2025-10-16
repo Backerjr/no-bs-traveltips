@@ -71,3 +71,25 @@ with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
 
     with gr.Row():
         with gr.Column(scale=2):
+            # main chat area: chatbot is already declared above, place input and submit controls here
+            with gr.Row():
+                msg_input.render()
+                send_btn = gr.Button("Send")
+
+            # wire submit and button to the chat handler
+            msg_input.submit(fn=chat_response, inputs=[msg_input, chatbot, language_state], outputs=[msg_input, chatbot, tip_output, booking_output])
+            send_btn.click(fn=chat_response, inputs=[msg_input, chatbot, language_state], outputs=[msg_input, chatbot, tip_output, booking_output])
+
+        with gr.Column(scale=1):
+            # Language selector and informational panels
+            lang_selector.render()
+            gr.Markdown("### Tip")
+            tip_output.render()
+            gr.Markdown("### Booking")
+            booking_output.render()
+
+    # language change updates labels/placeholders and the language state
+    lang_selector.change(fn=update_ui_language, inputs=lang_selector, outputs=[chatbot, msg_input, language_state])
+
+    # launch app
+    demo.launch()
