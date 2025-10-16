@@ -51,7 +51,7 @@ def update_ui_language(language):
     )
 
 
-# ✅ FINAL SAFE GRADIO 4.29+ LAYOUT
+# ✅ FINAL Gradio 4.29-compatible layout
 with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
     language_state = gr.State("en")
 
