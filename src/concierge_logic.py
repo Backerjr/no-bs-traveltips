@@ -58,7 +58,8 @@ def get_concierge_response(user_query: str, language: str = "en") -> tuple[str, 
     tip_title = "Ahmed's Tip™" if language == "en" else "نصيحة أحمد™"
     booking_info = None
 
-    if not user_query:
+    # Use strip() to handle empty or whitespace-only queries
+    if not user_query or not user_query.strip():
         data = KNOWLEDGE_BASE["greeting"][language]
         return data["response"], data["tip"], tip_title, booking_info
 
