@@ -1,14 +1,14 @@
- feat/initial-project-structure
 ---
-title: Ahmed’s AI Concierge™
-emoji: 🐪✨
+title: "Ahmed’s AI Concierge™"
+emoji: "🐪✨"
 colorFrom: "#1A237E"
 colorTo: "#D4AF37"
-sdk: gradio
-sdk_version: 4.29.0
-app_file: app.py
+sdk: "gradio"
+sdk_version: "4.29.0"
+app_file: "app.py"
 pinned: false
 ---
+
 
 # **Ahmed’s AI Concierge™**
 
