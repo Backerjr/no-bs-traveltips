@@ -60,3 +60,11 @@ def test_default_response_ar():
     assert response == KNOWLEDGE_BASE["default"]["ar"]["response"]
     assert tip == KNOWLEDGE_BASE["default"]["ar"]["tip"]
     assert booking_info is None
+
+def test_whitespace_query_en():
+    """Test that a query with only whitespace returns the greeting."""
+    response, tip, tip_title, booking_info = get_concierge_response("   ", language="en")
+    assert response == KNOWLEDGE_BASE["greeting"]["en"]["response"], "Whitespace query should return greeting"
+    assert tip == KNOWLEDGE_BASE["greeting"]["en"]["tip"]
+    assert tip_title == "Ahmed's Tip™"
+    assert booking_info is None
