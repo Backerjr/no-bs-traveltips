@@ -18,6 +18,7 @@ UI_TEXT = {
     }
 }
 
+
 def chat_response(message, history, language):
     language_code = normalize_language_selection(language)
     history.append({"role": "user", "content": message})
@@ -41,6 +42,7 @@ def chat_response(message, history, language):
 
     return "", history, tip_card_html, booking_card_html
 
+
 def update_ui_language(language):
     lang_code = normalize_language_selection(language)
     return (
@@ -49,7 +51,8 @@ def update_ui_language(language):
         lang_code,
     )
 
-# --- Gradio Interface ---
+
+# --- Gradio Interface Definition ---
 with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
     language_state = gr.State("en")
 
@@ -63,3 +66,34 @@ with gr.Blocks(css="assets/style.css", theme=gr.themes.Soft()) as demo:
 
     with gr.Row():
         with gr.Column(scale=2):
+            chatbot = gr.Chatbot(
+                label=UI_TEXT["en"]["chatbot_label"],
+                height=450,
+                bubble_styling={"template": "soft"}
+            )
+            msg_input = gr.Textbox(
+                label=UI_TEXT["en"]["input_label"],
+                placeholder=UI_TEXT["en"]["input_placeholder"]
+            )
+
+        with gr.Column(scale=1):
+            tip_output = gr.Markdown()
+            booking_output = gr.Markdown()
+
+    lang_selector.change(
+        fn=update_ui_language,
+        inputs=lang_selector,
+        outputs=[chatbot, msg_input, language_state],
+    )
+
+    msg_input.submit(
+        fn=chat_response,
+        inputs=[msg_input, chatbot, language_state],
+        outputs=[msg_input, chatbot, tip_output, booking_output]
+    )
+
+
+if __name__ == "__main__":
+    import sys
+    share = '--share' in sys.argv
+    demo.launch(share=share)
